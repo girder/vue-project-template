@@ -1,24 +1,33 @@
 import axios from 'axios';
+import OauthClient from '@girder/oauth-client';
 import * as Sentry from '@sentry/vue';
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 
-Vue.config.productionTip = false;
-
 const axiosInstance = axios.create({
   baseURL: process.env.VUE_APP_API_ROOT,
 });
+
+const oauthClient = new OauthClient(
+  process.env.VUE_APP_OAUTH_API_ROOT,
+  process.env.VUE_APP_OAUTH_CLIENT_ID,
+);
 
 Sentry.init({
   Vue,
   dsn: process.env.VUE_APP_SENTRY_DSN,
 });
 
-new Vue({
-  provide: {
-    axios: axiosInstance,
-  },
-  router,
-  render: (h) => h(App),
-}).$mount('#app');
+oauthClient.maybeRestoreLogin().then(async () => {
+  Object.assign(axiosInstance.defaults.headers.common, oauthClient.authHeaders);
+
+  new Vue({
+    provide: {
+      axios: axiosInstance,
+      oauthClient,
+    },
+    router,
+    render: (h) => h(App),
+  }).$mount('#app');
+});
