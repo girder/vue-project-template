@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/vue';
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import vuetify from './plugins/vuetify';
 
 const axiosInstance = axios.create({
   baseURL: process.env.VUE_APP_API_ROOT,
@@ -27,7 +28,9 @@ oauthClient.maybeRestoreLogin().then(async () => {
       axios: axiosInstance,
       oauthClient,
     },
+
     router,
+    vuetify,
     render: (h) => h(App),
   }).$mount('#app');
 });
