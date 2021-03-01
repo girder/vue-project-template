@@ -2,9 +2,12 @@ import axios from 'axios';
 import OauthClient from '@girder/oauth-client';
 import * as Sentry from '@sentry/vue';
 import Vue from 'vue';
+import VueCompositionAPI from '@vue/composition-api';
 import App from './App.vue';
 import router from './router';
 import vuetify from './plugins/vuetify';
+
+Vue.use(VueCompositionAPI);
 
 const axiosInstance = axios.create({
   baseURL: process.env.VUE_APP_API_ROOT,
@@ -28,7 +31,6 @@ oauthClient.maybeRestoreLogin().then(async () => {
       axios: axiosInstance,
       oauthClient,
     },
-
     router,
     vuetify,
     render: (h) => h(App),
