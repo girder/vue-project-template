@@ -1,4 +1,4 @@
-# vuekiecutter
+# Vue Project Template
 
 This is a project boilerplate template designed for building SPAs that will serve as
 front-ends to Girder 4-based servers. The following features are included:
