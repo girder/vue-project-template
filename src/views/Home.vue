@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, inject } from '@vue/composition-api';
+import { defineComponent, inject, computed } from '@vue/composition-api';
 import OAuthClient from '@girder/oauth-client';
 
 export default defineComponent({
@@ -9,21 +9,16 @@ export default defineComponent({
       throw new Error('Must provide "oauthClient" into component.');
     }
 
-    return { oauthClient };
-  },
-  computed: {
-    loginText(): string {
-      return this.oauthClient.isLoggedIn ? 'Logout' : 'Login';
-    },
-  },
-  methods: {
-    logInOrOut(): void {
-      if (this.oauthClient.isLoggedIn) {
-        this.oauthClient.logout();
+    const loginText = computed(() => (oauthClient.isLoggedIn ? 'Logout' : 'Login'));
+    const logInOrOut = () => {
+      if (oauthClient.isLoggedIn) {
+        oauthClient.logout();
       } else {
-        this.oauthClient.redirectToLogin();
+        oauthClient.redirectToLogin();
       }
-    },
+    };
+
+    return { oauthClient, loginText, logInOrOut };
   },
 });
 </script>
