@@ -1,14 +1,17 @@
 <script lang="ts">
-import { defineComponent, inject, computed } from '@vue/composition-api';
+import {
+  defineComponent, inject, computed, reactive,
+} from '@vue/composition-api';
 import OAuthClient from '@girder/oauth-client';
 
 export default defineComponent({
   setup() {
-    const oauthClient = inject<OAuthClient>('oauthClient');
-    if (oauthClient === undefined) {
+    const injectedClient = inject<OAuthClient>('oauthClient');
+    if (injectedClient === undefined) {
       throw new Error('Must provide "oauthClient" into component.');
     }
 
+    const oauthClient = reactive(injectedClient);
     const loginText = computed(() => (oauthClient.isLoggedIn ? 'Logout' : 'Login'));
     const logInOrOut = () => {
       if (oauthClient.isLoggedIn) {
