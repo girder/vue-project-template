@@ -1,18 +1,17 @@
-import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import { createWebHistory, RouterOptions } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 
-Vue.use(VueRouter);
+function makeOptions(): RouterOptions {
+  return {
+    history: createWebHistory(),
+    routes: [
+      {
+        path: '/',
+        // component: HomePage,
+        component: HomePage,
+      },
+    ],
+  };
+}
 
-const routes: Array<RouteConfig> = [
-  {
-    path: '/',
-    component: HomePage,
-  },
-];
-
-const router = new VueRouter({
-  routes,
-});
-
-export default router;
+export default makeOptions;

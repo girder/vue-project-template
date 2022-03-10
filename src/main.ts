@@ -1,38 +1,36 @@
-import axios from 'axios';
-import OauthClient from '@girder/oauth-client';
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
 import * as Sentry from '@sentry/vue';
-import Vue from 'vue';
-import VueCompositionAPI from '@vue/composition-api';
+import { createApp, } from 'vue';
+import { createRouter } from 'vue-router';
+import { createVuetify } from 'vuetify';
+
 import App from './App.vue';
-import router from './router';
-import vuetify from './plugins/vuetify';
+import oauthClient, { maybeRestoreLogin } from './plugins/OAuth';
+import makeOptions from './router';
 
-Vue.use(VueCompositionAPI);
+const app = createApp(App);
+const Vuetify = createVuetify({});
 
-const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_API_ROOT,
-});
+maybeRestoreLogin().then(() => {
+  /*
+  The router must not be initialized until after the oauth flow is complete, because it
+  stores the initial history state at the time of its construction, and we don't want it
+  to capture that initial state until after we remove any OAuth response params from the URL.
+  */
+  const router = createRouter(makeOptions());
 
-const oauthClient = new OauthClient(
-  process.env.VUE_APP_OAUTH_API_ROOT,
-  process.env.VUE_APP_OAUTH_CLIENT_ID,
-);
+  if (import.meta.env.VUE_APP_SENTRY_DSN && window.location.hostname !== 'localhost') {
+    Sentry.init({
+      app,
+      dsn: import.meta.env.VUE_APP_SENTRY_DSN as string,
+      release: __COMMIT_HASH__,
+    });
+  }
 
-Sentry.init({
-  Vue,
-  dsn: process.env.VUE_APP_SENTRY_DSN,
-});
-
-oauthClient.maybeRestoreLogin().then(async () => {
-  Object.assign(axiosInstance.defaults.headers.common, oauthClient.authHeaders);
-
-  new Vue({
-    provide: {
-      axios: axiosInstance,
-      oauthClient,
-    },
-    router,
-    vuetify,
-    render: (h) => h(App),
-  }).$mount('#app');
+  app.use(router);
+  app.use(Vuetify);
+  app.provide('oauthClient', oauthClient);
+  // Object.assign(axiosInstance.defaults.headers.common, oauthClient.authHeaders);
+  app.mount('#app');
 });

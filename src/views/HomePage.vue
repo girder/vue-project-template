@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, inject, computed } from '@vue/composition-api';
+import { defineComponent, inject, computed } from 'vue';
 import OAuthClient from '@girder/oauth-client';
 
 export default defineComponent({
