@@ -6,7 +6,7 @@ import { createRouter } from 'vue-router';
 import { createVuetify } from 'vuetify';
 
 import App from './App.vue';
-import oauthClient, { maybeRestoreLogin } from './plugins/OAuth';
+import oauthClient, { maybeRestoreLogin } from './plugins/Oauth';
 import makeOptions from './router';
 
 const app = createApp(App);

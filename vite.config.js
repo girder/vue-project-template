@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import Vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import Vue from '@vitejs/plugin-vue';
 import Vuetify from '@vuetify/vite-plugin';
 
 // https://vitejs.dev/config/

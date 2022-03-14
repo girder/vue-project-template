@@ -3,17 +3,20 @@ on:
   pull_request:
     branches:
       - master
+      - vue-3
   push:
     branches:
       - master
+      - vue-3
+
 jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
 
@@ -30,6 +33,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - run: yarn
-      - run: yarn lint --no-fix
+      - run: yarn lint
       - run: yarn test:unit
       - run: yarn build
+      - run: yarn type
