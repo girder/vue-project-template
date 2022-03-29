@@ -15,4 +15,7 @@ export default defineConfig({
       autoImport: true
     }),
   ],
+  alias: {
+    '@': path.resolve(__dirname, './src'),
+  },
 });
