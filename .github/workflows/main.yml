@@ -2,12 +2,12 @@ name: CI
 on:
   pull_request:
     branches:
-      - master
-      - vue-3
+      - main
+      - vue-2
   push:
     branches:
-      - master
-      - vue-3
+      - main
+      - vue-2
 
 jobs:
   build-and-test:
