@@ -27,7 +27,6 @@ export default defineComponent({
   <v-app-bar app>
     <v-spacer />
     <v-btn
-      text
       @click="logInOrOut"
     >
       {{ loginText }}
